@@ -2,13 +2,13 @@
 
 ## Setting up the VM
 
-For my VM, I use Debian.
+For my VM, I use [Debian](https://www.debian.org/distrib/).
 
 **1. Virtual Hard Disk**</br>
 When setting up the virtual machine, first you will be asked to configure the virtual hard disk. I use the **VDI-format** for the virtual hard disk file and let it be **8GB** and **fixed size**. I create the virtual disk in the `/Users/user/goinfre/` folder.
 
 **2. Configuring the network**</br>
-I set the hostname as `roger`. I leave the domain name blank, because [one is unlikely to be needed in a project of this scale](https://superuser.com/questions/889456/correct-domain-name-for-a-home-desktop-linux-machine).
+I set the hostname as the cluster computer name, e.g. `c1r1p1`. I leave the domain name blank, because [one is unlikely to be needed in a project of this scale](https://superuser.com/questions/889456/correct-domain-name-for-a-home-desktop-linux-machine).
 
 **3. Partioning of the virtual hard disk**</br>
 I manually partion the virtual hard disk into two partions (sizes 4.2GB, 3.4GB and 1.0GB for swap). See picture below.
@@ -35,14 +35,14 @@ Then we have to edit the sudoers file (here i use nano, because vim is not insta
 $ cd /etc
 $ chmod +w sudoers
 $ nano sudoers
-$ chmod -w sudoers
 ```
 In nano, add a line under the *user privileges* section.
 ```
 cnysten ALL=(ALL:ALL) ALL
 ```
-Then exit root.
+Then restore the old permissions and exit root.
 ```
+$ chmod -w sudoers
 $ exit
 ```
 Now commands requiring super user rights can be run by prefixing them with sudo. For example, installing new packages requires super user rights. I can now install the packages I will be using for the rest of the project.
