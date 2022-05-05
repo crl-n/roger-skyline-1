@@ -45,8 +45,10 @@ Then exit root.
 ```
 $ exit
 ```
-Now commands requiring super user rights can be run by prefixing them with sudo. For example, installing vim requires super upser rights. I can now install it as the non-root user.
+Now commands requiring super user rights can be run by prefixing them with sudo. For example, installing new packages requires super user rights. I can now install the packages I will be using for the rest of the project.
 ```
-$ sudo apt install vim -y
+$ sudo apt install vim net-tools -y
 ```
 
+### 2. Setting up static IP
+Edit /etc/interfaces.
