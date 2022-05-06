@@ -54,4 +54,20 @@ $ sudo apt install vim net-tools -y
 To begin with, we will change the VM adapter setting from NAT to **Bridged Adapter**.
 <img width="649" alt="image" src="https://user-images.githubusercontent.com/65853349/167119893-49f59e57-16f2-4ec6-ba44-01e06719425d.png">
 
-Next we will set up a static IP. The IP I will be using is `10.11.203.111`. If you are wondering where this IP comes from, it is essentially made up. To do this, we'll browse to `/etc/network/`. Here, we modify the *interfaces file*.
+Next we will manually configure our network interface to use a static IP. The IP I will be using is `10.11.203.111`. If you are wondering where this IP comes from, it is essentially made up. To do this, we'll browse to `/etc/network/`. Here, we modify the the primary network interface configuration in the file *interfaces*.
+```
+# The primary network interface
+auto enp0s3
+```
+Then we add a file to the *interfaces.d* directory.
+```
+$ cd interfaces.d
+$ vim enp0s3
+```
+... adding the following lines:
+```
+iface enp0s3 inet static
+    address 10.11.203.111
+    netmask 255.255.255.252
+    gateway 10.11.254.254
+```
