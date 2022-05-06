@@ -1,4 +1,4 @@
-# roger-skylilne-1
+# roger-skyline-1
 
 ## Setting up the VM
 
@@ -51,4 +51,7 @@ $ sudo apt install vim net-tools -y
 ```
 
 ### 2. Setting up static IP
-Edit /etc/interfaces.
+To begin with, we will change the VM adapter setting from NAT to **Bridged Adapter**.
+<img width="649" alt="image" src="https://user-images.githubusercontent.com/65853349/167119893-49f59e57-16f2-4ec6-ba44-01e06719425d.png">
+
+Next we will set up a static IP. The IP I will be using is `10.11.203.111`. If you are wondering where this IP comes from, it is essentially made up. To do this, we'll browse to `/etc/network/`. Here, we modify the *interfaces file*.
