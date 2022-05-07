@@ -135,12 +135,26 @@ $ sudo ufw allow 50000/tcp
 $ sudo ufw allow 80/tcp
 $ sudo ufw allow 443/tcp
 ```
-We can then check the status of our firewall and it's rules with
+We can then enable ufw and check the status of our firewall and it's rules with
 ```
+$ sudo ufw enable
 $ sudo ufw status
 ```
 
+### 5. DOS protection
 
+
+### 6. Port scan protection
+
+### 7. Stopping unneeded services
+
+### 8. Package update script
+
+### 9. Crontab script
+
+## Web part
+
+## Deployment part
 
 
 
