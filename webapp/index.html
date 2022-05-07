@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>A wonderful website that blows your mind</title>
+		<style>
+			.blink {
+				animation: blinker 0.6s linear infinite;
+				font-weight: bold;
+				font-family: sans-serif;
+			}
+			@keyframes blinker {
+			50% {
+					opacity: 0;
+				}
+			}
+				.blink-one {
+				animation: blinker-one 1s linear infinite;
+			}
+			@keyframes blinker-one {
+			0% {
+				opacity: 0;
+			}
+			}
+			.blink-two {
+			animation: blinker-two 1.4s linear infinite;
+			}
+			@keyframes blinker-two {
+			100% {
+				opacity: 0;
+			}
+			}
+	</style>
+	</head>
+	<body style="color:hotpink;">
+		<h1 class="blink">This is a wonderful website that blows your mind</h1>
+		<p class="blink">This website hase absolutely no meaningful content at all, but it still blows your mind.</p>
+	</body>
+</html>
