@@ -135,12 +135,41 @@ $ sudo ufw allow 50000/tcp
 $ sudo ufw allow 80/tcp
 $ sudo ufw allow 443/tcp
 ```
-We can then check the status of our firewall and it's rules with
+We can then enable ufw and check the status of our firewall and it's rules with
 ```
+$ sudo ufw enable
 $ sudo ufw status
 ```
 
+### 5. DOS protection
 
+
+### 6. Port scan protection
+
+### 7. Stopping unneeded services
+
+### 8. Package update script
+
+### 9. Crontab script
+
+## Web part
+
+First, we install Apache2. I used [this guide](https://medium.com/swlh/apache-for-beginners-9d104225ec89) to configure my server.
+```
+$ sudo apt install apache2
+```
+------------- Deprecated -----------------
+The website I made for this project requires Node.js and Express.js. Install Node.js and npm using
+```
+$ sudo apt-get install nodejs npm
+```
+Use npm to get needed node packages.
+```
+$ npm install
+```
+------------------------------------------
+
+## Deployment part
 
 
 
