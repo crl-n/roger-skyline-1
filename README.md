@@ -104,7 +104,26 @@ We edit the file so that the following settings are set followingly:
 PasswordAuthentication no
 PubkeyAuthentication yes
 ```
-Now we need a public key from our host system on our virtual machine in order to be able to connect to it. We can copy any public using `$ ssh-copy-id -i [path to public key] [username]@[static ip of vm] -p [ssh port of vm]`
+Now we need a public key from our host system on our virtual machine in order to be able to connect to it. We can copy any public using
+```$ ssh-copy-id -i [path to public key] [username]@[static ip of vm] -p [ssh port of vm]```
+
+#### No root login
+This can be achieved by changing the `PermitRootLogin` setting in *sshd_config* to `PermitRootLogin no`.
+
+#### Default port
+The default port is changed simply by editing the port setting to `Port 50000`. I chose to use 50000 simply becaue it is easy to remember. The only requirement is that the port number is in the range 49152 – 65535.
+
+To finish up we restart the ssh service and reset permissions.
+```
+$ sudo service ssh restart
+$ sudo chmod -w ssh_config
+```
+
+### 4. Firewall set up
+
+
+
+
 
 
 
