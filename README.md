@@ -158,16 +158,8 @@ First, we install Apache2. I used [this guide](https://medium.com/swlh/apache-fo
 ```
 $ sudo apt install apache2
 ```
-------------- Deprecated -----------------
-The website I made for this project requires Node.js and Express.js. Install Node.js and npm using
+Apache2 stores the default website in `/var/www/html/`. Out of the box, it contains a default *index.html* file. We replace this on with our own.
 ```
-$ sudo apt-get install nodejs npm
-```
-Use npm to get needed node packages.
-```
-$ npm install
-```
-------------------------------------------
 
 ## Deployment part
 
