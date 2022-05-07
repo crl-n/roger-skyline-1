@@ -72,9 +72,11 @@ iface enp0s3 inet static
     gateway 10.11.254.254
 ```
 So where do these addresses come from? 
-
+<br>
 **IP:** The two latter fields of the static IP address are essentially made up. The first two fields follow the same pattern (10.1X where X is the number of the cluster) as the local addresses of other cluster computers. 
+<br>
 **Netmask:** We are asked to configure a netmask in \30. This piece of information gives us the netmask address, [see here for more information](https://www.aelius.com/njh/subnet_sheet.html).
+<br>
 **Gateway:** We can look up the gateway address using a command we're familiar with from init (network/04) `netstat -nr | grep 'default.*en0'
 `. 
 
@@ -91,4 +93,18 @@ As a last check, we should make sure everything works correctly by for example p
 ```
 $ ping google.com
 ```
+
+### 3. Configuring SSH
+
+To configure the SSH we browse to `/etc/ssh` and `sudo chmod +w` the *sshd_config* file so that we can edit it.
+
+#### Connection by public key only
+We edit the file so that the following settings are set followingly:
+```
+PasswordAuthentication no
+PubkeyAuthentication yes
+```
+Now we need a public key from our host system on our virtual machine in order to be able to connect to it. We can copy any public using `$ ssh-copy-id -i [path to public key] [username]@[static ip of vm] -p [ssh port of vm]`
+
+
 
