@@ -120,6 +120,25 @@ $ sudo chmod -w ssh_config
 ```
 
 ### 4. Firewall set up
+We can use *ufw* to set up our firewall rules. First, we need to install ufw.
+```
+$ sudo apt install ufw
+```
+We then deny all incoming connection and allow all outgoing connections by default.
+```
+$ sudo ufw default deny incoming
+$ sudo ufw default allow outgoing
+```
+On top of these default settings, we explicilty allow connections for HTTP, HTTPS and SSH.
+```
+$ sudo ufw allow 50000/tcp
+$ sudo ufw allow 80/tcp
+$ sudo ufw allow 443/tcp
+```
+We can then check the status of our firewall and it's rules with
+```
+$ sudo ufw status
+```
 
 
 
