@@ -154,6 +154,21 @@ $ sudo ufw status
 
 ## Web part
 
+First, we install Apache2. I used [this guide](https://medium.com/swlh/apache-for-beginners-9d104225ec89) to configure my server.
+```
+$ sudo apt install apache2
+```
+------------- Deprecated -----------------
+The website I made for this project requires Node.js and Express.js. Install Node.js and npm using
+```
+$ sudo apt-get install nodejs npm
+```
+Use npm to get needed node packages.
+```
+$ npm install
+```
+------------------------------------------
+
 ## Deployment part
 
 
