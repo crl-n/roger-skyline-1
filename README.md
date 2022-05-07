@@ -71,7 +71,12 @@ iface enp0s3 inet static
     netmask 255.255.255.252
     gateway 10.11.254.254
 ```
-So where do these addresses come from? The two latter fields of the static IP address are essentially made up. The first two fields follow the same pattern (10.1X where X is the number of the cluster) as the local addresses of other cluster computers. We are asked to configure a netmask in \30. This piece of information gives us the netmask address, [see here for more information](https://www.aelius.com/njh/subnet_sheet.html).
+So where do these addresses come from? 
+
+**IP:** The two latter fields of the static IP address are essentially made up. The first two fields follow the same pattern (10.1X where X is the number of the cluster) as the local addresses of other cluster computers. 
+**Netmask:** We are asked to configure a netmask in \30. This piece of information gives us the netmask address, [see here for more information](https://www.aelius.com/njh/subnet_sheet.html).
+**Gateway:** We can look up the gateway address using a command we're familiar with from init (network/04) `netstat -nr | grep 'default.*en0'
+`. 
 
 Now we have to restart the networking service to get the changes into effect.
 ```
