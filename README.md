@@ -71,3 +71,17 @@ iface enp0s3 inet static
     netmask 255.255.255.252
     gateway 10.11.254.254
 ```
+Now we have to restart the networking service to get the changes into effect.
+```
+$ sudo service networking restart
+```
+We can then check that the network service is up and running and that our new static IP is being used by the networking service.
+```
+$ sudo service networking status
+$ sudo ifconfig
+```
+As a last check, we should make sure everything works correctly by for example pinging or accessing any website.
+```
+$ ping google.com
+```
+
