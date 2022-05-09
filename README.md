@@ -239,9 +239,33 @@ Services can be disabled using `sudo systemctl disable [service name]`
 
 ### 8. Package update script
 
+Make a script to update packages using apt. Something like the script below, for instance.
+```
+#!/bin/sh
+echo "[`date`] sudo apt update -y" >> /var/log/update_script.log
+echo "`sudo apt update -y`" >> /var/log/update_script.log
+echo "[`date`] sudo apt update -y" >> /var/log/update_script.log
+echo "`sudo apt update -y`" >> /var/log/update_script.log
+```
 
+Add the following lines to your crontab to schedule the task.
+```
+@reboot sh /usr/local/bin/package_update.sh &
+0 4 * * 1 sh /usr/local/bin/package_update.sh &
+```
 
 ### 9. Crontab script
+
+Create the script. Mine looks like this.
+```
+
+
+```
+
+Add the following lines to your crontab to schedule the task.
+```
+0 0 * * * sh /usr/local/bin/monitor_crontab.sh &
+```
 
 ## Web part
 
