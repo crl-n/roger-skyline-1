@@ -248,12 +248,24 @@ echo "[`date`] sudo apt update -y" >> /var/log/update_script.log
 echo "`sudo apt update -y`" >> /var/log/update_script.log
 ```
 
-Add the following line to your crontab to schedule the task.
+Add the following lines to your crontab to schedule the task.
 ```
-0 4 * * 1 sh /usr/local/bin/package_update.sh
+@reboot sh /usr/local/bin/package_update.sh &
+0 4 * * 1 sh /usr/local/bin/package_update.sh &
 ```
 
 ### 9. Crontab script
+
+Create the script. Mine looks like this.
+```
+
+
+```
+
+Add the following lines to your crontab to schedule the task.
+```
+0 0 * * * sh /usr/local/bin/monitor_crontab.sh &
+```
 
 ## Web part
 
