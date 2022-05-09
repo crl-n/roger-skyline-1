@@ -142,7 +142,60 @@ $ sudo ufw status
 ```
 
 ### 5. DOS protection
+We can use fail2ban to set up rules that protect us from DOS attacks. First, install fail2ban.
+```
+$ sudo apt install fail2ban
+```
+To configure fail2ban, browse to `/etc/fail2ban/`. Here, there is a file called *jail.conf*. Copy this file and name the copy *jail.local*.
+```
+$ sudo cp jail.conf jail.local
+```
+Find the right part of the file and add configuration for SSH.
+```
+#
+# SSH servers
+#
 
+[sshd]
+
+# To use more aggressive sshd modes set filter parameter "mode" in jail.local:
+# normal (default), ddos, extra or aggressive (combines all).
+# See "tests/files/logs/sshd" or "filter.d/sshd.conf" for usage example and details.
+#mode   = normal
+enable = true
+port    = ssh
+logpath = %(sshd_log)s
+backend = %(sshd_backend)s
+maxentry = 3
+bantime = 600
+```
+And then do the same for HTTP and HTTPS.
+```
+# Protect HTTP and HTTPS (HTTP)
+
+[http-get-dos]
+
+enabled = true
+port = http,https
+filter = http-get-dos
+logpath = %(apache_error_log)s
+maxentry = 300
+findtime = 300
+bantime = 300
+action = iptables[name=HTTP, port=http, protocol=tcp]
+```
+Lastly, we need to create the http-get-dos filter we just specified in the configuration. Create the file `/etc/fail2ban/filter.d/http-get-dos.conf`.
+```
+[Definition]
+
+failregex = ^<HOST> -.*"GET.*
+ignoreregex =
+```
+
+For more info on configuring fail2ban, [check out this guide](https://upcloud.com/community/tutorials/install-fail2ban-debian/).
+
+#### Testing DOS protection
+I use [slowloris](https://github.com/gkbrk/slowloris) to test my DOS protection. 
 
 ### 6. Port scan protection
 
