@@ -195,7 +195,7 @@ ignoreregex =
 For more info on configuring fail2ban, [check out this guide](https://upcloud.com/community/tutorials/install-fail2ban-debian/).
 
 #### Testing DOS protection
-I use [slowloris](https://github.com/gkbrk/slowloris) to test my DOS protection. 
+I used [slowloris](https://github.com/gkbrk/slowloris) to test my DOS protection. It is very easy to use. Run the script and give it your VM's static IP as the argument. Fail2ban should ban the attacker IP and you should see `Socket count: 0` in the terminal running slowloris. You can check fail2ban logs using `sudo tail -f /var/log/fail2ban.log`
 
 ### 6. Port scan protection
 
