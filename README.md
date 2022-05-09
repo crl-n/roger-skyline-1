@@ -219,10 +219,23 @@ Next, open `/etc/portsentry/portsentry.conf`, browse to the *Ignore Options* sec
 BLOCK_UDP="1"
 BLOCK_TCP="1"
 ```
-
-
+Find the line `KILL_ROUTE="/sbin/iptables -I INPUT -s $TARGET$ -j DROP"` and make sure it is not commented. Make sure all other lines starting with KILL_ROUTE are commented out.
 
 ### 7. Stopping unneeded services
+We can list enabled services using `sudo systemctl list-unit-files --type=service --state=enabled --all`.
+<img width="394" alt="image" src="https://user-images.githubusercontent.com/65853349/167374454-fd873a69-3d96-42b3-978d-27c385c030ee.png">
+
+For this project, we need at least the following services.
+```
+apache2
+cron
+fail2ban
+getty
+networking
+ssh
+ufw
+```
+
 
 ### 8. Package update script
 
