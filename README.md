@@ -198,6 +198,29 @@ For more info on configuring fail2ban, [check out this guide](https://upcloud.co
 I used [slowloris](https://github.com/gkbrk/slowloris) to test my DOS protection. It is very easy to use. Run the script and give it your VM's static IP as the argument. Fail2ban should ban the attacker IP and you should see `Socket count: 0` in the terminal running slowloris. You can check fail2ban logs using `sudo tail -f /var/log/fail2ban.log`
 
 ### 6. Port scan protection
+You can use *portsentry* to protect your ports. Install it. `sudo apt install portsentry`
+You might have to reboot the VM after install to get portsentry to work.
+
+Next we have to configure portsentry. By default portsentry only checks for scanning on specified ports. We want it to detect scanning attempts on all ports. To make this happen, edit `/etc/default/portsentry` so that TCP_MODE and UDP_MODE are set to advanced.
+```
+# /etc/default/portsentry
+#
+# This file is read by /etc/init.d/portsentry. See the portsentry.8
+# manpage for details.
+#
+# The options in this file refer to commandline arguments (all in lowercase)
+# of portsentry. Use only one tcp and udp mode at a time.
+#
+TCP_MODE="atcp"
+UDP_MODE="audp"
+```
+Next, open `/etc/portsentry/portsentry.conf`, browse to the *Ignore Options* section and turn blocking on.
+```
+BLOCK_UDP="1"
+BLOCK_TCP="1"
+```
+
+
 
 ### 7. Stopping unneeded services
 
