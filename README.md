@@ -249,15 +249,11 @@ First, we install Apache2. I used [this guide](https://medium.com/swlh/apache-fo
 $ sudo apt install apache2
 ```
 Apache2 stores the default website in `/var/www/html/`. Out of the box, it contains a default *index.html* file. We replace this on with our own.
-```
+
 To copy the web app folder over SSH use scp.
 ```
 $ scp -P 50000 webapp.tar.gz cnysten@10.11.203.111:/home/cnysten
 ```
 
 ## Deployment part
-
-
-
-
-
+For automatic deployment I've created a script that will deploy the website over SSH. The user is required to run the script when a change is wished to be deployed to the remote server. See *deploy.sh*.
