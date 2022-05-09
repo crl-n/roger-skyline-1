@@ -237,8 +237,9 @@ ufw
 ```
 Services can be disabled using `sudo systemctl disable [service name]`
 
-
 ### 8. Package update script
+
+
 
 ### 9. Crontab script
 
@@ -252,6 +253,7 @@ Apache2 stores the default website in `/var/www/html/`. Out of the box, it conta
 
 To copy the web app folder over SSH use scp.
 ```
+$ tar xvf webapp.tar.gz --directory=webapp .
 $ scp -P 50000 webapp.tar.gz cnysten@10.11.203.111:/home/cnysten
 ```
 
