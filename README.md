@@ -256,6 +256,12 @@ Add the following lines to your crontab to schedule the task.
 @reboot sh /usr/local/bin/package_update.sh &
 0 4 * * 1 sh /usr/local/bin/package_update.sh &
 ```
+If the script is stored remotely, it can be deployed over ssh.
+```
+$ scp -P 50000 package_update.sh cnysten@10.11.203.111:/home/cnysten
+$ 
+
+```
 
 ### 9. Crontab script
 
