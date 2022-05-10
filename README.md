@@ -181,10 +181,10 @@ And then do the same for HTTP and HTTPS.
 enabled = true
 port = http,https
 filter = http-get-dos
-logpath = %(apache_error_log)s
+logpath = /var/log/apache2/access.log
 maxentry = 300
 findtime = 300
-bantime = 300
+bantime = 600
 action = iptables[name=HTTP, port=http, protocol=tcp]
 ```
 Lastly, we need to create the http-get-dos filter we just specified in the configuration. Create the file `/etc/fail2ban/filter.d/http-get-dos.conf`.
