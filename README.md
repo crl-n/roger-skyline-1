@@ -5,10 +5,10 @@
 For my VM, I use [Debian](https://www.debian.org/distrib/).
 
 **1. Virtual Hard Disk**</br>
-When setting up the virtual machine, first you will be asked to configure the virtual hard disk. I use the **VDI-format** for the virtual hard disk file and let it be **8GB** and **fixed size**. I create the virtual disk in the `/Users/user/goinfre/` folder.
+When setting up the virtual machine, first you will be asked to configure the virtual hard disk. I use the **VDI-format** for the virtual hard disk file and let it be **8GB** and **fixed size**. I create the virtual disk in the `/Users/user/goinfre/` folder. 
 
 **2. Configuring the network**</br>
-I set the hostname as the cluster computer name, e.g. `c1r1p1`. I leave the domain name blank, because [one is unlikely to be needed in a project of this scale](https://superuser.com/questions/889456/correct-domain-name-for-a-home-desktop-linux-machine).
+I set the hostname as `debian`. I leave the domain name blank, because [one is unlikely to be needed in a project of this scale](https://superuser.com/questions/889456/correct-domain-name-for-a-home-desktop-linux-machine).
 
 **3. Partioning of the virtual hard disk**</br>
 I manually partion the virtual hard disk into two partions (sizes 4.2GB, 3.4GB and 1.0GB for swap). See picture below.
@@ -96,7 +96,12 @@ $ ping google.com
 
 ### 3. Configuring SSH
 
-To configure the SSH we browse to `/etc/ssh` and `sudo chmod +w` the *sshd_config* file so that we can edit it.
+Before we turn of password authentication we need a public key from our host system on our virtual machine in order to be able to connect to it later without the use of a password. We can copy any public key using
+```
+$ ssh-copy-id -i [path to public key] [username]@[static ip of vm] -p [ssh port of vm]
+```
+
+Great. Now we can proceed to configure the SSH. Browse to `/etc/ssh` and `sudo chmod +w` the *sshd_config* file so that we can edit it.
 
 #### Connection by public key only
 We edit the file so that the following settings are set followingly:
@@ -104,8 +109,6 @@ We edit the file so that the following settings are set followingly:
 PasswordAuthentication no
 PubkeyAuthentication yes
 ```
-Now we need a public key from our host system on our virtual machine in order to be able to connect to it. We can copy any public using
-```$ ssh-copy-id -i [path to public key] [username]@[static ip of vm] -p [ssh port of vm]```
 
 #### No root login
 This can be achieved by changing the `PermitRootLogin` setting in *sshd_config* to `PermitRootLogin no`.
