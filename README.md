@@ -200,6 +200,11 @@ For more info on configuring fail2ban, [check out this guide](https://upcloud.co
 #### Testing DOS protection
 I used [slowloris](https://github.com/gkbrk/slowloris) to test my DOS protection. It is very easy to use. Run the script and give it your VM's static IP as the argument. Fail2ban should ban the attacker IP and you should see `Socket count: 0` in the terminal running slowloris. You can check fail2ban logs using `sudo tail -f /var/log/fail2ban.log`
 
+To unban yourself you don't have to wait for the bantime to be over.
+```
+$ sudo fail2ban-client set jail_name unbanip xxx.xxx.xxx.xxx
+```
+
 ### 6. Port scan protection
 You can use *portsentry* to protect your ports. Install it. `sudo apt install portsentry`
 You might have to reboot the VM after install to get portsentry to work.
