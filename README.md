@@ -259,8 +259,7 @@ Add the following lines to your crontab to schedule the task.
 If the script is stored remotely, it can be deployed over ssh.
 ```
 $ scp -P 50000 package_update.sh cnysten@10.11.203.111:/home/cnysten
-$ 
-
+$ ssh -t -p 50000 cnysten@10.11.203.111 "sudo mv package_update.sh /usr/local/bin/"
 ```
 
 ### 9. Crontab script
