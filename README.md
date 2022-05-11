@@ -288,19 +288,28 @@ $ ssh -t -p 50000 cnysten@10.11.203.111 "sudo mv package_update.sh /usr/local/bi
 Create the script. Mine looks like this.
 ```
 #!/bin/sh
-CRONTAB=/etc/crontab
-BACKUP=/etc/crontab.backup
+CRONTAB=/var/spool/cron/crontabs/root
+BACKUP=/var/spool/cron/crontabs/backup
 MESSAGE="There has been a change to the crontab."
 
-if test -f "$BACKUP"; then
+echo 'Looking for changes in crontab...'
+
+if [ ! -e $BACKUP ]; then
+	echo 'No previous backup found, creating backup...'
+	cp $CRONTAB $BACKUP
+	echo 'Exiting...'
 	exit 0
 fi
 
 DIFF=$(diff $CRONTAB $BACKUP)
 
+echo 'Checking diff...'
+
 if [ "$DIFF" != "" ]; then
 	echo MESSAGE | mail -s 'Crontab change' root@debian.lan
 fi
+
+cp $CRONTAB $BACKUP
 ```
 
 Add the following lines to your crontab to schedule the task.
@@ -320,7 +329,7 @@ Now you should be able to send mail to `root@debian.lan`. These messages can be 
 
 For debugging issues with mailing it can be useful to look at the mail logs.
 ```
-$ tail -f /var/log/mail.log
+$ sudo tail -f /var/log/mail.log
 ```
 
 ## Web part
