@@ -229,6 +229,16 @@ BLOCK_TCP="1"
 ```
 Find the line `KILL_ROUTE="/sbin/iptables -I INPUT -s $TARGET$ -j DROP"` and make sure it is not commented. Make sure all other lines starting with KILL_ROUTE are commented out.
 
+To see the banned IPs use
+```
+$ sudo iptables -L -n -v | head
+```
+
+To unban yourself, use
+```
+$ iptables -D INPUT -s 10.1x.xxx.xxx -j DROP
+```
+
 ### 7. Stopping unneeded services
 We can list enabled services using `sudo systemctl list-unit-files --type=service --state=enabled --all`.
 <img width="394" alt="image" src="https://user-images.githubusercontent.com/65853349/167374454-fd873a69-3d96-42b3-978d-27c385c030ee.png">
