@@ -229,6 +229,11 @@ BLOCK_TCP="1"
 ```
 Find the line `KILL_ROUTE="/sbin/iptables -I INPUT -s $TARGET$ -j DROP"` and make sure it is not commented. Make sure all other lines starting with KILL_ROUTE are commented out.
 
+That's it! Scanning the ports of the VM should now get you banned. You can easily test this with a port scanner such as *nmap*.
+```
+$ nmap 10.1x.xxx.xxx
+```
+
 To see the banned IPs use
 ```
 $ sudo iptables -L -n -v | head
@@ -238,6 +243,7 @@ To unban yourself, use
 ```
 $ iptables -D INPUT -s 10.1x.xxx.xxx -j DROP
 ```
+and open */etc/hosts.deny* and delete the line with your ip.
 
 ### 7. Stopping unneeded services
 We can list enabled services using `sudo systemctl list-unit-files --type=service --state=enabled --all`.
@@ -289,6 +295,16 @@ Add the following lines to your crontab to schedule the task.
 ```
 0 0 * * * sh /usr/local/bin/monitor_crontab.sh &
 ```
+
+Next we need to configure our system to handle the emails. For this we need mailutils and postfix.
+```
+$ sudo apt install mailutils postfix
+```
+In the postfix installation, choose **local only** and set the *system mail name* to **debian.lan**. 
+
+Edit */etc/aliases*, change the line with `root:` to `root: root@debian.lan`. Run `sudo newaliases` to get the changes into effect.
+
+Now you should be able to send mail to `root@debian.lan`. These messages can be viewed by logging in as root and using `mailx`.
 
 ## Web part
 
