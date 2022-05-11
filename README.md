@@ -306,6 +306,11 @@ Edit */etc/aliases*, change the line with `root:` to `root: root@debian.lan`. Ru
 
 Now you should be able to send mail to `root@debian.lan`. These messages can be viewed by logging in as root and using `mailx`.
 
+For debugging issues with mailing it can be useful to look at the mail logs.
+```
+$ tail -f /var/log/mail.log
+```
+
 ## Web part
 
 First, we install Apache2. I used [this guide](https://medium.com/swlh/apache-for-beginners-9d104225ec89) to configure my server.
