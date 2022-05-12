@@ -164,7 +164,7 @@ Find the right part of the file and add configuration for SSH.
 # To use more aggressive sshd modes set filter parameter "mode" in jail.local:
 # normal (default), ddos, extra or aggressive (combines all).
 # See "tests/files/logs/sshd" or "filter.d/sshd.conf" for usage example and details.
-#mode   = normal
+mode   = agressive
 enabled = true
 port    = ssh
 logpath = %(sshd_log)s
