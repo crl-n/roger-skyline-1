@@ -348,12 +348,27 @@ $ scp -P 50000 webapp.tar.gz cnysten@10.11.203.111:/home/cnysten
 
 ### SSL
 I used this [guide](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04) to set up the self-signed ssl certificate.
-First, we have to create a key and a certificate using openssl.
+First, we have to enable the ssl module of apache and create a key and a certificate using openssl.
 ```
+$ sudo a2enmod ssl
 $ sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
 ```
+Then create a file `/etcapache2/sites-available/10..1x.xxx.xxx.conf`.
+```
+<VirtualHost *:443>
+	ServerName 10.11.203.111
+	DocumentRoot /var/www/html/
 
-
+	SSLEngine on
+	SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
+	SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
+</VirtualHost>
+<VirtualHost *:80>
+	ServerName 10.11.203.111
+	Redirect / https://10.11.203.111/
+</VirtualHost>
+```
+Use `sudo apache2ctl configtest` to test your config and `sudo systemctl reload apache2` to restart your server.
 
 ## Deployment part
 For automatic deployment I've created a script that will deploy the website over SSH. The user is required to run the script when a change is wished to be deployed to the remote server. See *deploy.sh*.
