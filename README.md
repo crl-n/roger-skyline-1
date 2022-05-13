@@ -346,5 +346,14 @@ $ tar xvf webapp.tar.gz --directory=webapp .
 $ scp -P 50000 webapp.tar.gz cnysten@10.11.203.111:/home/cnysten
 ```
 
+### SSL
+I used this [guide](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04) to set up the self-signed ssl certificate.
+First, we have to create a key and a certificate using openssl.
+```
+$ sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
+```
+
+
+
 ## Deployment part
 For automatic deployment I've created a script that will deploy the website over SSH. The user is required to run the script when a change is wished to be deployed to the remote server. See *deploy.sh*.
