@@ -357,7 +357,7 @@ First, we have to enable the ssl module of apache and create a key and a certifi
 $ sudo a2enmod ssl
 $ sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
 ```
-Then create a file `/etcapache2/sites-available/10..1x.xxx.xxx.conf`.
+Then create a file `/etc/apache2/sites-available/10.1x.xxx.xxx.conf`.
 ```
 <VirtualHost *:443>
 	ServerName 10.11.203.111
@@ -372,7 +372,12 @@ Then create a file `/etcapache2/sites-available/10..1x.xxx.xxx.conf`.
 	Redirect / https://10.11.203.111/
 </VirtualHost>
 ```
-Use `sudo apache2ctl configtest` to test your config and `sudo systemctl reload apache2` to restart your server.
+Use `sudo apache2ctl configtest` to test your config. You should get a message that looks something like this.
+```
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+Syntax OK
+```
+Now run the command `sudo a2ensite 10.1x.xxx.xxx` and then `sudo systemctl reload apache2` to restart your server.
 
 ## Deployment part
 For automatic deployment I've created a script that will deploy the website over SSH. The user is required to run the script when a change is wished to be deployed to the remote server. See *deploy.sh*.
