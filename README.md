@@ -100,6 +100,10 @@ Before we turn of password authentication we need a public key from our host sys
 ```
 $ ssh-copy-id -i [path to public key] [username]@[static ip of vm] -p [ssh port of vm]
 ```
+If you get a warning, saying that remote host identification has changed (this could happen if you created a new VM with the same IP you used previously), you need to add the new fingerprint of the VM to your known hosts on the host system.
+```
+$ ssh-keyscan -H 10.11.203.111 >> ~/.ssh/known_hosts
+```
 
 Great. Now we can proceed to configure the SSH. Browse to `/etc/ssh` and `sudo chmod +w` the *sshd_config* file so that we can edit it.
 
