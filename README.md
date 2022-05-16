@@ -126,6 +126,9 @@ $ sudo service ssh restart
 $ sudo chmod -w ssh_config
 ```
 
+#### Troubleshooting
+If you are having issues connecting by public key you can use the `-vvv` flag of the `ssh` command to debug the ssh connection. In the debug output you can see which keys are being used for authentication. Make sure that the correct host key is in the *known_hosts* file of the cluster computer and that the correct __public__ key is in the *authorized_keys* on the VM.
+
 ### 4. Firewall set up
 We can use *ufw* to set up our firewall rules. First, we need to install ufw.
 ```
