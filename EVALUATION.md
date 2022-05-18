@@ -43,8 +43,9 @@ sudo netstat --tcp --programs --numeric | grep ssh
 ```
 
 ### Open Ports
-You can use netstat to see which ports are open.
+You can use netstat or lsof to see which ports are open.
 ```
 netstat -tunlp
+sudo lsof -Pni
 ```
 
