@@ -227,7 +227,7 @@ IPT_SYSLOG_FILE			/var/log/syslog;
 MIN_DANGER_LEVEL		1;
 ENABLE_AUTO_IDS			Y;
 AUTO_IDS_DANGER_LEVEL		1;
-AUTO_BLOCK_TIMEOUT		45;
+AUTO_BLOCK_TIMEOUT		300;
 ```
 
 You can [read more about configuring psad here](https://www.digitalocean.com/community/tutorials/how-to-use-psad-to-detect-network-intrusion-attempts-on-an-ubuntu-vps).
@@ -236,6 +236,8 @@ That's it! Scanning the ports of the VM should now get you banned. You can easil
 ```
 $ nmap 10.1x.xxx.xxx
 ```
+
+You can see that the IP has been blocked in `/var/log/psad/auto_blocked_iptables`.
 
 ### 7. Stopping unneeded services
 We can list enabled services using `sudo systemctl list-unit-files --type=service --state=enabled --all`.
