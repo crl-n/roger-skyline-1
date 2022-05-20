@@ -340,8 +340,8 @@ To copy the web app folder over SSH use scp.
 $ tar xvf webapp.tar.gz --directory=webapp .
 $ scp -P 50000 webapp.tar.gz cnysten@10.11.203.111:/home/cnysten
 ```
-
-According to the evval form Apache2 should not listen to localhost i.e. 127.0.0.1. To achieve this, edit */etc/apache2/ports.conf* so that all Listen -statements have not only the port but also your IP. It should look something like this.
+### No Localhost
+According to the eval form Apache2 should not listen to localhost i.e. 127.0.0.1. To achieve this, edit **/etc/apache2/ports.conf** so that all Listen -statements have not only the port but also your IP. It should look something like this.
 ```
 Listen 10.11.203.111:80
 
@@ -353,6 +353,7 @@ Listen 10.11.203.111:80
 	Listen 10.11.203.111:443
 </IfModule>
 ```
+Now you should be able to access the web-app through your IP but not using 127.0.0.1 while you are on the VM. To test this you need *curl* or something similar because your Debian doesn't have a regular web browser if you installed it according to the instructions in this text. You can install curl with `apt install curl`. Then you can simply `curl 127.0.0.1`. You should get a **failed connection** message.
 
 ### SSL
 I used this [guide](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04) to set up the self-signed ssl certificate.
