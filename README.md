@@ -237,17 +237,6 @@ That's it! Scanning the ports of the VM should now get you banned. You can easil
 $ nmap 10.1x.xxx.xxx
 ```
 
-To see the banned IPs use
-```
-$ sudo iptables -L -n -v | head
-```
-
-To unban yourself, use
-```
-$ iptables -D INPUT -s 10.1x.xxx.xxx -j DROP
-```
-and open */etc/hosts.deny* and delete the line with your ip.
-
 ### 7. Stopping unneeded services
 We can list enabled services using `sudo systemctl list-unit-files --type=service --state=enabled --all`.
 <img width="394" alt="image" src="https://user-images.githubusercontent.com/65853349/167374454-fd873a69-3d96-42b3-978d-27c385c030ee.png">
