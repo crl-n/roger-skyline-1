@@ -213,28 +213,24 @@ $ sudo fail2ban-client set jail_name unbanip xxx.xxx.xxx.xxx
 ```
 
 ### 6. Port scan protection
-You can use *portsentry* to protect your ports. Install it. `sudo apt install portsentry`
-You might have to reboot the VM after install to get portsentry to work.
+You can use psad to protect from port scans.
+```sudo apt install psad```
 
-Next we have to configure portsentry. By default portsentry only checks for scanning on specified ports. We want it to detect scanning attempts on all ports. To make this happen, edit `/etc/default/portsentry` so that TCP_MODE and UDP_MODE are set to advanced.
+Next we have to configure psad by editing `/etc/psad/psad.conf`.
+
+I edited the config followingly:
 ```
-# /etc/default/portsentry
-#
-# This file is read by /etc/init.d/portsentry. See the portsentry.8
-# manpage for details.
-#
-# The options in this file refer to commandline arguments (all in lowercase)
-# of portsentry. Use only one tcp and udp mode at a time.
-#
-TCP_MODE="atcp"
-UDP_MODE="audp"
+EMAIL_ADDRESSES			root@debian.lan;
+HOSTNAME			debian;
+PORT_RANGE_SCAN_THRESHOLD	1;
+IPT_SYSLOG_FILE			/var/log/syslog;
+MIN_DANGER_LEVEL		1;
+ENABLE_AUTO_IDS			Y;
+AUTO_IDS_DANGER_LEVEL		1;
+AUTO_BLOCK_TIMEOUT		45;
 ```
-Next, open `/etc/portsentry/portsentry.conf`, browse to the *Ignore Options* section and turn blocking on.
-```
-BLOCK_UDP="1"
-BLOCK_TCP="1"
-```
-Find the line `KILL_ROUTE="/sbin/iptables -I INPUT -s $TARGET$ -j DROP"` and make sure it is not commented. Make sure all other lines starting with KILL_ROUTE are commented out. Moreover, for me, it was necessary to change `-j DROP` to `-j DENY` for portsentry to work correctly with ufw.
+
+You can [read more about configuring psad here](https://www.digitalocean.com/community/tutorials/how-to-use-psad-to-detect-network-intrusion-attempts-on-an-ubuntu-vps).
 
 That's it! Scanning the ports of the VM should now get you banned. You can easily test this with a port scanner such as *nmap*.
 ```
