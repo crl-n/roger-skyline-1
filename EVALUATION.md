@@ -49,3 +49,11 @@ netstat -tunlp
 sudo lsof -Pni
 ```
 
+## Web
+
+### Apache Configs
+Show Apache virtual hosts.
+```
+apachectl -D DUMP_VHOSTS
+```
+
