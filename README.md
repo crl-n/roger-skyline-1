@@ -234,7 +234,7 @@ Next, open `/etc/portsentry/portsentry.conf`, browse to the *Ignore Options* sec
 BLOCK_UDP="1"
 BLOCK_TCP="1"
 ```
-Find the line `KILL_ROUTE="/sbin/iptables -I INPUT -s $TARGET$ -j DROP"` and make sure it is not commented. Make sure all other lines starting with KILL_ROUTE are commented out.
+Find the line `KILL_ROUTE="/sbin/iptables -I INPUT -s $TARGET$ -j DROP"` and make sure it is not commented. Make sure all other lines starting with KILL_ROUTE are commented out. Moreover, for me, it was necessary to change `-j DROP` to `-j DENY` for portsentry to work correctly with ufw.
 
 That's it! Scanning the ports of the VM should now get you banned. You can easily test this with a port scanner such as *nmap*.
 ```
