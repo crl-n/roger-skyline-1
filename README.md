@@ -237,7 +237,7 @@ That's it! Scanning the ports of the VM should now get you banned. You can easil
 $ nmap 10.1x.xxx.xxx
 ```
 
-You can see that the IP has been blocked in `/var/log/psad/auto_blocked_iptables`.
+You can see that the IP has been blocked in `/var/log/psad/auto_blocked_iptables`. Reboot the VM to drop the ban.
 
 ### 7. Stopping unneeded services
 We can list enabled services using `sudo systemctl list-unit-files --type=service --state=enabled --all`.
