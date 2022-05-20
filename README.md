@@ -329,6 +329,7 @@ $ sudo tail -f /var/log/mail.log
 ## Web part
 
 First, we install Apache2. I used [this guide](https://medium.com/swlh/apache-for-beginners-9d104225ec89) to configure my server.
+
 ```
 $ sudo apt install apache2
 ```
@@ -338,6 +339,19 @@ To copy the web app folder over SSH use scp.
 ```
 $ tar xvf webapp.tar.gz --directory=webapp .
 $ scp -P 50000 webapp.tar.gz cnysten@10.11.203.111:/home/cnysten
+```
+
+According to the evval form Apache2 should not listen to localhost i.e. 127.0.0.1. To achieve this, edit */etc/apache2/ports.conf* so that all Listen -statements have not only the port but also your IP. It should look something like this.
+```
+Listen 10.11.203.111:80
+
+<IfModule ssl_module>
+	Listen 10.11.203.111:443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+	Listen 10.11.203.111:443
+</IfModule>
 ```
 
 ### SSL
