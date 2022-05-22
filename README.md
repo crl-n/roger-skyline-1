@@ -26,15 +26,15 @@ $ su
 ```
 Then we installl sudo using apt.
 ```
-$ apt update -y
-$ apt upgrade -y
-$ apt install sudo -y
+apt update -y
+apt upgrade -y
+apt install sudo -y
 ```
 Then we have to edit the sudoers file (here i use nano, because vim is not installed yet).
 ```
-$ cd /etc
-$ chmod +w sudoers
-$ nano sudoers
+cd /etc
+chmod +w sudoers
+nano sudoers
 ```
 In nano, add a line under the *user privileges* section.
 ```
@@ -42,12 +42,12 @@ cnysten ALL=(ALL:ALL) ALL
 ```
 Then restore the old permissions and exit root.
 ```
-$ chmod -w sudoers
-$ exit
+chmod -w sudoers
+exit
 ```
 Now commands requiring super user rights can be run by prefixing them with sudo. For example, installing new packages requires super user rights. I can now install the packages I will be using for the rest of the project.
 ```
-$ sudo apt install vim net-tools -y
+sudo apt install vim net-tools -y
 ```
 
 ### 2. Setting up static IP
@@ -61,8 +61,8 @@ auto enp0s3
 ```
 Then we add a file to the *interfaces.d* directory.
 ```
-$ cd interfaces.d
-$ vim enp0s3
+cd interfaces.d
+vim enp0s3
 ```
 ... adding the following lines:
 ```
@@ -82,23 +82,27 @@ So where do these addresses come from?
 
 Now we have to restart the networking service to get the changes into effect.
 ```
-$ sudo service networking restart
+sudo service networking restart
 ```
 We can then check that the network service is up and running and that our new static IP is being used by the networking service.
 ```
-$ sudo service networking status
-$ sudo ifconfig
+sudo service networking status
+sudo ifconfig
 ```
 As a last check, we should make sure everything works correctly by for example pinging or accessing any website.
 ```
-$ ping google.com
+ping google.com
 ```
 
 ### 3. Configuring SSH
 
 Before we turn of password authentication we need a public key from our host system on our virtual machine in order to be able to connect to it later without the use of a password. We can copy any public key using
 ```
-$ ssh-copy-id -i [path to public key] [username]@[static ip of vm] -p [ssh port of vm]
+ssh-copy-id -i [path to public key] [username]@[static ip of vm] -p [ssh port of vm]
+```
+If you get a warning, saying that remote host identification has changed (this could happen if you created a new VM with the same IP you used previously), you need to add the new fingerprint of the VM to your known hosts on the host system.
+```
+ssh-keyscan -H 10.11.203.111 >> ~/.ssh/known_hosts
 ```
 
 Great. Now we can proceed to configure the SSH. Browse to `/etc/ssh` and `sudo chmod +w` the *sshd_config* file so that we can edit it.
@@ -118,40 +122,43 @@ The default port is changed simply by editing the port setting to `Port 50000`. 
 
 To finish up we restart the ssh service and reset permissions.
 ```
-$ sudo service ssh restart
-$ sudo chmod -w ssh_config
+sudo service ssh restart
+sudo chmod -w ssh_config
 ```
+
+#### Troubleshooting
+If you are having issues connecting by public key you can use the `-vvv` flag of the `ssh` command to debug the ssh connection. In the debug output you can see which keys are being used for authentication. Make sure that the correct host key is in the *known_hosts* file of the cluster computer and that the correct __public__ key is in the *authorized_keys* on the VM.
 
 ### 4. Firewall set up
 We can use *ufw* to set up our firewall rules. First, we need to install ufw.
 ```
-$ sudo apt install ufw
+sudo apt install ufw
 ```
 We then deny all incoming connection and allow all outgoing connections by default.
 ```
-$ sudo ufw default deny incoming
-$ sudo ufw default allow outgoing
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
 ```
 On top of these default settings, we explicilty allow connections for HTTP, HTTPS and SSH.
 ```
-$ sudo ufw allow 50000/tcp
-$ sudo ufw allow 80/tcp
-$ sudo ufw allow 443/tcp
+sudo ufw allow 50000/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
 ```
 We can then enable ufw and check the status of our firewall and it's rules with
 ```
-$ sudo ufw enable
-$ sudo ufw status
+sudo ufw enable
+sudo ufw status
 ```
 
 ### 5. DOS protection
 We can use fail2ban to set up rules that protect us from DOS attacks. First, install fail2ban.
 ```
-$ sudo apt install fail2ban
+sudo apt install fail2ban
 ```
 To configure fail2ban, browse to `/etc/fail2ban/`. Here, there is a file called *jail.conf*. Copy this file and name the copy *jail.local*.
 ```
-$ sudo cp jail.conf jail.local
+sudo cp jail.conf jail.local
 ```
 Find the right part of the file and add configuration for SSH.
 ```
@@ -164,7 +171,7 @@ Find the right part of the file and add configuration for SSH.
 # To use more aggressive sshd modes set filter parameter "mode" in jail.local:
 # normal (default), ddos, extra or aggressive (combines all).
 # See "tests/files/logs/sshd" or "filter.d/sshd.conf" for usage example and details.
-#mode   = normal
+mode   = agressive
 enabled = true
 port    = ssh
 logpath = %(sshd_log)s
@@ -202,48 +209,35 @@ I used [slowloris](https://github.com/gkbrk/slowloris) to test my DOS protection
 
 To unban yourself you don't have to wait for the bantime to be over.
 ```
-$ sudo fail2ban-client set jail_name unbanip xxx.xxx.xxx.xxx
+sudo fail2ban-client set jail_name unbanip xxx.xxx.xxx.xxx
 ```
 
 ### 6. Port scan protection
-You can use *portsentry* to protect your ports. Install it. `sudo apt install portsentry`
-You might have to reboot the VM after install to get portsentry to work.
+You can use psad to protect from port scans.
+```sudo apt install psad```
 
-Next we have to configure portsentry. By default portsentry only checks for scanning on specified ports. We want it to detect scanning attempts on all ports. To make this happen, edit `/etc/default/portsentry` so that TCP_MODE and UDP_MODE are set to advanced.
+Next we have to configure psad by editing `/etc/psad/psad.conf`.
+
+I edited the config followingly:
 ```
-# /etc/default/portsentry
-#
-# This file is read by /etc/init.d/portsentry. See the portsentry.8
-# manpage for details.
-#
-# The options in this file refer to commandline arguments (all in lowercase)
-# of portsentry. Use only one tcp and udp mode at a time.
-#
-TCP_MODE="atcp"
-UDP_MODE="audp"
+EMAIL_ADDRESSES			root@debian.lan;
+HOSTNAME			debian;
+PORT_RANGE_SCAN_THRESHOLD	1;
+IPT_SYSLOG_FILE			/var/log/syslog;
+MIN_DANGER_LEVEL		1;
+ENABLE_AUTO_IDS			Y;
+AUTO_IDS_DANGER_LEVEL		1;
+AUTO_BLOCK_TIMEOUT		300;
 ```
-Next, open `/etc/portsentry/portsentry.conf`, browse to the *Ignore Options* section and turn blocking on.
-```
-BLOCK_UDP="1"
-BLOCK_TCP="1"
-```
-Find the line `KILL_ROUTE="/sbin/iptables -I INPUT -s $TARGET$ -j DROP"` and make sure it is not commented. Make sure all other lines starting with KILL_ROUTE are commented out.
+
+You can [read more about configuring psad here](https://www.digitalocean.com/community/tutorials/how-to-use-psad-to-detect-network-intrusion-attempts-on-an-ubuntu-vps).
 
 That's it! Scanning the ports of the VM should now get you banned. You can easily test this with a port scanner such as *nmap*.
 ```
-$ nmap 10.1x.xxx.xxx
+nmap 10.1x.xxx.xxx
 ```
 
-To see the banned IPs use
-```
-$ sudo iptables -L -n -v | head
-```
-
-To unban yourself, use
-```
-$ iptables -D INPUT -s 10.1x.xxx.xxx -j DROP
-```
-and open */etc/hosts.deny* and delete the line with your ip.
+Reboot the VM to drop the ban.
 
 ### 7. Stopping unneeded services
 We can list enabled services using `sudo systemctl list-unit-files --type=service --state=enabled --all`.
@@ -279,16 +273,37 @@ Add the following lines to your crontab to schedule the task.
 ```
 If the script is stored remotely, it can be deployed over ssh.
 ```
-$ scp -P 50000 package_update.sh cnysten@10.11.203.111:/home/cnysten
-$ ssh -t -p 50000 cnysten@10.11.203.111 "sudo mv package_update.sh /usr/local/bin/"
+scp -P 50000 package_update.sh cnysten@10.11.203.111:/home/cnysten
+ssh -t -p 50000 cnysten@10.11.203.111 "sudo mv package_update.sh /usr/local/bin/"
 ```
 
 ### 9. Crontab script
 
 Create the script. Mine looks like this.
 ```
+#!/bin/sh
+CRONTAB=/var/spool/cron/crontabs/root
+BACKUP=/var/spool/cron/crontabs/backup
+MESSAGE="There has been a change to the crontab."
 
+echo 'Looking for changes in crontab...'
 
+if [ ! -e $BACKUP ]; then
+	echo 'No previous backup found, creating backup...'
+	cp $CRONTAB $BACKUP
+	echo 'Exiting...'
+	exit 0
+fi
+
+DIFF=$(diff $CRONTAB $BACKUP)
+
+echo 'Checking diff...'
+
+if [ "$DIFF" != "" ]; then
+	echo MESSAGE | mail -s 'Crontab change' root@debian.lan
+fi
+
+cp $CRONTAB $BACKUP
 ```
 
 Add the following lines to your crontab to schedule the task.
@@ -298,7 +313,7 @@ Add the following lines to your crontab to schedule the task.
 
 Next we need to configure our system to handle the emails. For this we need mailutils and postfix.
 ```
-$ sudo apt install mailutils postfix
+sudo apt install mailutils postfix
 ```
 In the postfix installation, choose **local only** and set the *system mail name* to **debian.lan**. 
 
@@ -308,12 +323,13 @@ Now you should be able to send mail to `root@debian.lan`. These messages can be 
 
 For debugging issues with mailing it can be useful to look at the mail logs.
 ```
-$ tail -f /var/log/mail.log
+sudo tail -f /var/log/mail.log
 ```
 
 ## Web part
 
 First, we install Apache2. I used [this guide](https://medium.com/swlh/apache-for-beginners-9d104225ec89) to configure my server.
+
 ```
 $ sudo apt install apache2
 ```
@@ -321,9 +337,52 @@ Apache2 stores the default website in `/var/www/html/`. Out of the box, it conta
 
 To copy the web app folder over SSH use scp.
 ```
-$ tar xvf webapp.tar.gz --directory=webapp .
-$ scp -P 50000 webapp.tar.gz cnysten@10.11.203.111:/home/cnysten
+tar xvf webapp.tar.gz --directory=webapp .
+scp -P 50000 webapp.tar.gz cnysten@10.11.203.111:/home/cnysten
 ```
+### No Localhost
+According to the eval form Apache2 should not listen to localhost i.e. 127.0.0.1. To achieve this, edit **/etc/apache2/ports.conf** so that all Listen -statements have not only the port but also your IP. It should look something like this.
+```
+Listen 10.11.203.111:80
+
+<IfModule ssl_module>
+	Listen 10.11.203.111:443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+	Listen 10.11.203.111:443
+</IfModule>
+```
+Now you should be able to access the web-app through your IP but not using 127.0.0.1 while you are on the VM. To test this you need *curl* or something similar because your Debian doesn't have a regular web browser if you installed it according to the instructions in this text. You can install curl with `apt install curl`. Then you can simply `curl 127.0.0.1`. You should get a **failed connection** message.
+
+### SSL
+I used this [guide](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04) to set up the self-signed ssl certificate.
+First, we have to enable the ssl module of apache and create a key and a certificate using openssl.
+```
+sudo a2enmod ssl
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
+```
+Then create a file `/etc/apache2/sites-available/10.1x.xxx.xxx.conf`.
+```
+<VirtualHost *:443>
+	ServerName 10.11.203.111
+	DocumentRoot /var/www/html/
+
+	SSLEngine on
+	SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
+	SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
+</VirtualHost>
+<VirtualHost *:80>
+	ServerName 10.11.203.111
+	Redirect / https://10.11.203.111/
+</VirtualHost>
+```
+Use `sudo apache2ctl configtest` to test your config. You should get a message that looks something like this.
+```
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+Syntax OK
+```
+Now run the command `sudo a2ensite 10.1x.xxx.xxx` and then `sudo systemctl reload apache2` to restart your server.
 
 ## Deployment part
 For automatic deployment I've created a script that will deploy the website over SSH. The user is required to run the script when a change is wished to be deployed to the remote server. See *deploy.sh*.
