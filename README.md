@@ -1,5 +1,7 @@
 # roger-skyline-1
 
+**DISCLAIMER: These are my personal notes and at this time they are still a work in progress and contain some errors. If you refer to these notes in any way while working on your own roger-skyline-1, make sure to read up on everything and don't just blindly copy these instructions.**
+
 ## Setting up the VM
 
 For my VM, I use [Debian](https://www.debian.org/distrib/).
@@ -262,8 +264,8 @@ Make a script to update packages using apt. Something like the script below, for
 #!/bin/sh
 echo "[`date`] sudo apt update -y" >> /var/log/update_script.log
 echo "`sudo apt update -y`" >> /var/log/update_script.log
-echo "[`date`] sudo apt update -y" >> /var/log/update_script.log
-echo "`sudo apt update -y`" >> /var/log/update_script.log
+echo "[`date`] sudo apt upgrade -y" >> /var/log/update_script.log
+echo "`sudo apt upgrade -y`" >> /var/log/update_script.log
 ```
 
 Add the following lines to your crontab to schedule the task.
